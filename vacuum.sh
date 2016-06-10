@@ -1,6 +1,6 @@
 #!/bin/bash
 
-vault="test-vacuum"
+vault="test"
 file=$@
 
 if [[ -z $@ ]]
@@ -16,28 +16,30 @@ fi
 
 read -p "Archive description (optional): " inputarchivedescription
 
-if [[ -z $inputarchivedescription ]]
-then
-	archivedescription="$file.tar.gz"
-else
-	archivedescription="$file.tar.gz - $inputarchivedescription"
-fi
-
 read -p "Encrypt with GPG? y/N: " inputencrypt
 
 if [[ $inputencrypt == "y" ]]
 then
-    tarfile="temp-sinkhole-$(date +%s).tar.gz.gpg"
-    echo "tar czv $file | gpg -c > $tarfile"
-    tar czv $file | gpg -c > $tarfile
+    file_extension="tar.gz.gpg"
+    processed_file="temp-sinkhole-$(date +%s).$file_extension"
+    echo "tar czv $file | gpg -c > $processed_file"
+    tar czv "$file" | gpg -c > "$processed_file"
 else
-    tarfile="temp-sinkhole-$(date +%s).tar.gz"
-    echo "tar czvf $tarfile \"$file\""
-    tar czvf "$tarfile" "$file"
+    file_extension="tar.gz"
+    processed_file="temp-sinkhole-$(date +%s).$file_extension"
+    echo "tar czvf $processed_file \"$file\""
+    tar czvf "$processed_file" "$file"
 fi
 
-echo aws glacier upload-archive --vault-name $vault --account-id - --archive-description \"$archivedescription\" --body $tarfile
-aws glacier upload-archive --vault-name $vault --account-id - --archive-description "$archivedescription" --body $tarfile
+if [[ -z $inputarchivedescription ]]
+then
+	archivedescription="$file.$file_extension"
+else
+	archivedescription="$file.$file_extension - $inputarchivedescription"
+fi
 
-echo rm $tarfile
-rm $tarfile
+echo aws glacier upload-archive --vault-name $vault --account-id - --archive-description \"$archivedescription\" --body $processed_file
+aws glacier upload-archive --vault-name $vault --account-id - --archive-description "$archivedescription" --body $processed_file
+
+echo rm $processed_file
+rm $processed_file
