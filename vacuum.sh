@@ -37,7 +37,7 @@ else
 fi
 
 echo aws glacier upload-archive --vault-name $vault --account-id - --archive-description \"$archivedescription\" --body $tarfile
-aws glacier upload-archive --vault-name $vault --account-id - --archive-description "$file.tar.gz" --body $tarfile
+aws glacier upload-archive --vault-name $vault --account-id - --archive-description "$archivedescription" --body $tarfile
 
 echo rm $tarfile
 rm $tarfile
