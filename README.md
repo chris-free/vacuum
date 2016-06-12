@@ -38,8 +38,11 @@ aws glacier upload-archive --vault-name test --account-id - --archive-descriptio
     "checksum": "2cd2947fba538f1a108ce4e22c77401cde71c50eaed8f5fc91ccc111b21885d5", 
     "location": "/4711258160/vaults/test/archives/k4LJETQBKgqL2igsXXsgiKS2tO40OfaJCVm2V41niTu6XfBfZ0JqT4FhIvrCZHcoWEiOYOirSsw2Mt1og8_G3sEOwhaA84E1MU-bJ9CgyHp32qWOzZZZasdDDbuI7w2PVAnI3xhgOsr_A"
 }
-rm temp-sinkhole-1465581896.tar.gz.gpg```
+rm temp-sinkhole-1465581896.tar.gz.gpg
+```
 
-
+#### Potential todos
+1. Handle more than one file
+2. Multipart upload (to save space when processing)
 
 
