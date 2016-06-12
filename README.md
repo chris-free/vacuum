@@ -41,5 +41,8 @@ aws glacier upload-archive --vault-name test --account-id - --archive-descriptio
 rm temp-sinkhole-1465581896.tar.gz.gpg```
 
 
+#### Potential todos
+1. Handle more than one file
+2. Multipart upload (to save space when processing)
 
 
